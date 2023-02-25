@@ -1,0 +1,8 @@
+*.iml
+.idea/*
+.classpath
+*.jar
+target
+MANIFEST.MF
+coverage
+owasp
