@@ -29,11 +29,11 @@ public class InitAccountData {
 	/**
 	 * The private key.
 	 */
-    private String privateKey;
+	private String privateKey;
 
 	/**
 	 * The account balance in WEI.
 	 */
-    private BigInteger balanceInWei;
+	private BigInteger balanceInWei;
 
 }

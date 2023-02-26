@@ -20,7 +20,7 @@ import java.util.Map;
 @NoArgsConstructor
 public class GanacheOption {
 
-    final Map<GanacheVersionLevel, String> optionsByVersionLevel = new HashMap<>();
+	final Map<GanacheVersionLevel, String> optionsByVersionLevel = new HashMap<>();
 
 	/**
 	 * Adds an option.
@@ -29,10 +29,10 @@ public class GanacheOption {
 	 * @param optionName The option name.
 	 * @return The instance of {@code GanacheOption} including the added option.
 	 */
-    public GanacheOption addOption(final GanacheVersionLevel versionLevel, final String optionName) {
-        this.optionsByVersionLevel.put(versionLevel, optionName);
-        return this;
-    }
+	public GanacheOption addOption(final GanacheVersionLevel versionLevel, final String optionName) {
+		this.optionsByVersionLevel.put(versionLevel, optionName);
+		return this;
+	}
 
 	/**
 	 * Gets the appropriate option for the given Ganache version level.
@@ -40,7 +40,7 @@ public class GanacheOption {
 	 * @param versionLevel The version level.
 	 * @return The option name.
 	 */
-    public String getOptionNameForVersion(final GanacheVersionLevel versionLevel) {
-        return this.optionsByVersionLevel.get(versionLevel);
-    }
+	public String getOptionNameForVersion(final GanacheVersionLevel versionLevel) {
+		return this.optionsByVersionLevel.get(versionLevel);
+	}
 }

@@ -27,52 +27,52 @@ public enum ChainHardForkRule {
 	/**
 	 * ArrowGlacier rule.
 	 */
-    ARROW_GLACIER("arrowGlacier", V7),
+	ARROW_GLACIER("arrowGlacier", V7),
 	/**
 	 * Berlin rule.
 	 */
-    BERLIN("berlin", V7),
+	BERLIN("berlin", V7),
 	/**
 	 * Byzantium rule.
 	 */
-    BYZANTIUM("byzantium", V6, V7),
+	BYZANTIUM("byzantium", V6, V7),
 	/**
 	 * Constantinople rule.
 	 */
-    CONSTANTINOPLE("constantinople", V6, V7),
+	CONSTANTINOPLE("constantinople", V6, V7),
 	/**
 	 * GrayGlacier rule.
 	 */
-    GRAY_GLACIER("grayGlacier", V6, V7),
+	GRAY_GLACIER("grayGlacier", V6, V7),
 	/**
 	 * Istanbul rule.
 	 */
-    ISTANBUL("istanbul", V6, V7),
+	ISTANBUL("istanbul", V6, V7),
 	/**
 	 * London rule.
 	 */
-    LONDON("london", V7),
+	LONDON("london", V7),
 	/**
 	 * Merge rule.
 	 */
-    MERGE("merge", V7),
+	MERGE("merge", V7),
 	/**
 	 * MuirGlacier rule.
 	 */
-    MUIR_GLACIER("muirGlacier", V6, V7),
+	MUIR_GLACIER("muirGlacier", V6, V7),
 	/**
 	 * Petersburg rule.
 	 */
-    PETERSBURG("petersburg", V6, V7);
+	PETERSBURG("petersburg", V6, V7);
 
-    @Getter
-    private final String ruleName;
-    private final List<GanacheVersionLevel> supportedVersions;
+	@Getter
+	private final String ruleName;
+	private final List<GanacheVersionLevel> supportedVersions;
 
-    ChainHardForkRule(final String ruleName, final GanacheVersionLevel... supportedVersions) {
-        this.ruleName = ruleName;
-        this.supportedVersions = Arrays.asList(supportedVersions);
-    }
+	ChainHardForkRule(final String ruleName, final GanacheVersionLevel... supportedVersions) {
+		this.ruleName = ruleName;
+		this.supportedVersions = Arrays.asList(supportedVersions);
+	}
 
 	/**
 	 * Whether the specified Ganache version level supports the hardfork rule.

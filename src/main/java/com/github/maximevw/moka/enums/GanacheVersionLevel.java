@@ -20,20 +20,20 @@ public enum GanacheVersionLevel {
 	/**
 	 * Ganache CLI versions 6.x.
 	 */
-    V6("trufflesuite/ganache-cli", 6),
+	V6("trufflesuite/ganache-cli", 6),
 	/**
 	 * Ganache CLI versions 7.x.
 	 */
-    V7("trufflesuite/ganache", 7);
+	V7("trufflesuite/ganache", 7);
 
-    private final String imageName;
-    @Getter
-    private final int majorVersion;
+	private final String imageName;
+	@Getter
+	private final int majorVersion;
 
-    GanacheVersionLevel(final String imageName, final int majorVersion) {
-        this.imageName = imageName;
-        this.majorVersion = majorVersion;
-    }
+	GanacheVersionLevel(final String imageName, final int majorVersion) {
+		this.imageName = imageName;
+		this.majorVersion = majorVersion;
+	}
 
 	/**
 	 * Determines the version level based on the Ganache image name.
@@ -41,7 +41,7 @@ public enum GanacheVersionLevel {
 	 * @param imageName The Docker image name.
 	 * @return The version level. By default, if the name is not recognized, it will be considered as {@link #V7}.
 	 */
-    public static GanacheVersionLevel fromImageName(final String imageName) {
-        return Arrays.stream(values()).filter(value -> value.imageName.equals(imageName)).findFirst().orElse(V7);
-    }
+	public static GanacheVersionLevel fromImageName(final String imageName) {
+		return Arrays.stream(values()).filter(value -> value.imageName.equals(imageName)).findFirst().orElse(V7);
+	}
 }

@@ -18,14 +18,20 @@ import lombok.Getter;
  */
 public enum Instamine {
 
-    EAGER("eager"),
-    STRICT("strict");
+	/**
+	 * Eager instamine mode.
+	 */
+	EAGER("eager"),
+	/**
+	 * Strict instamine mode.
+	 */
+	STRICT("strict");
 
-    @Getter
-    private final String modeName;
+	@Getter
+	private final String modeName;
 
-    Instamine(final String modeName) {
-        this.modeName = modeName;
-    }
+	Instamine(final String modeName) {
+		this.modeName = modeName;
+	}
 
 }

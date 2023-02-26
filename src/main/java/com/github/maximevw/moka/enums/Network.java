@@ -21,21 +21,21 @@ public enum Network {
 	/**
 	 * Mainnet network.
 	 */
-    MAINNET("mainnet"),
+	MAINNET("mainnet"),
 	/**
 	 * Görli test network.
 	 */
-    GOERLI("goerli"),
+	GOERLI("goerli"),
 	/**
 	 * Sepolia network.
 	 */
-    SEPOLIA("sepolia");
+	SEPOLIA("sepolia");
 
-    @Getter
-    private final String networkName;
+	@Getter
+	private final String networkName;
 
-    Network(final String networkName) {
-        this.networkName = networkName;
-    }
+	Network(final String networkName) {
+		this.networkName = networkName;
+	}
 
 }

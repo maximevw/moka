@@ -33,29 +33,29 @@ public class TestingAccount {
 	/**
 	 * The address of the account.
 	 */
-    private String address;
+	private String address;
 
 	/**
 	 * The private key of the account.
 	 */
-    private String privateKey;
+	private String privateKey;
 
 	/**
 	 * The alias of the account.
 	 */
-    @Getter(AccessLevel.NONE)
-    @Setter
-    private String alias;
+	@Getter(AccessLevel.NONE)
+	@Setter
+	private String alias;
 
 	/**
 	 * Gets the Ganache container instance having generated this account.
 	 */
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private GanacheContainer<?> ganacheInstance;
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
+	private GanacheContainer<?> ganacheInstance;
 
 	/**
-	 * The balance of the account at the last call to {@link #checkpoint()}
+	 * The balance of the account at the last call to {@link #checkpoint()}.
 	 */
 	@Setter(AccessLevel.NONE)
 	private BigDecimal lastBalance;
@@ -65,33 +65,33 @@ public class TestingAccount {
 	 *
 	 * @return The credentials.
 	 */
-    public Credentials getCredentials() {
-        return Credentials.create(this.privateKey);
-    }
+	public Credentials getCredentials() {
+		return Credentials.create(this.privateKey);
+	}
 
 	/**
 	 * Gets the alias of the account.
 	 *
 	 * @return The alias of the account, always prefixed with a @ sign.
 	 */
-    public String getAlias() {
-        return "@" + this.alias;
-    }
+	public String getAlias() {
+		return "@" + this.alias;
+	}
 
 	/**
 	 * Gets the current balance of the account in ETHER.
 	 *
 	 * @return The balance of the account in ETHER.
 	 */
-    public BigDecimal getBalance() {
-        try {
-            final EthGetBalance ethGetBalance = this.ganacheInstance.getWeb3j()
-                    .ethGetBalance(this.address, DefaultBlockParameterName.LATEST).send();
-            return new AccountBalance(new BigDecimal(ethGetBalance.getBalance()), Convert.Unit.ETHER).getValueInUnit();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+	public BigDecimal getBalance() {
+		try {
+			final EthGetBalance ethGetBalance = this.ganacheInstance.getWeb3j()
+					.ethGetBalance(this.address, DefaultBlockParameterName.LATEST).send();
+			return new AccountBalance(new BigDecimal(ethGetBalance.getBalance()), Convert.Unit.ETHER).getValueInUnit();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	/**
 	 * Creates a new checkpoint of the account state.
