@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import static org.web3j.utils.Convert.fromWei;
+import static org.web3j.utils.Convert.toWei;
 
 /**
  * The account balance.
@@ -45,7 +46,7 @@ public class AccountBalance {
 	 */
 	public AccountBalance(final BigDecimal value, final Convert.Unit unit) {
 		if (unit != Convert.Unit.WEI) {
-			this.valueInWei = getValueIn(Convert.Unit.WEI).toBigInteger();
+			this.valueInWei = toWei(value, Convert.Unit.WEI).toBigInteger();
 		} else {
 			this.valueInWei = value.toBigInteger();
 		}
