@@ -8,6 +8,7 @@
 
 package com.github.maximevw.moka;
 
+import com.github.maximevw.moka.entities.TestingAccount;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -28,6 +29,7 @@ public class GanacheLogConsumer implements Consumer<OutputFrame> {
 	private static final Pattern ACCOUNT_PRIVATE_KEY = Pattern.compile("^\\((\\d+)\\) (0x[0-9a-zA-Z]*)$");
 	private static final Pattern GANACHE_VERSION = Pattern.compile("^ganache( CLI)? v(\\d+\\.\\d+\\.?\\d*) \\(.*\\)$",
 			Pattern.CASE_INSENSITIVE);
+	private static final Pattern RPC_LISTENING = Pattern.compile("^RPC Listening on .*:\\d+$");
 
 	private final GanacheContainer<?> ganacheContainer;
 
@@ -62,6 +64,12 @@ public class GanacheLogConsumer implements Consumer<OutputFrame> {
 			final int index = Integer.parseInt(privateKeyMatcher.group(1));
 			final String privateKey = privateKeyMatcher.group(2);
 			this.ganacheContainer.mapGanachePrivateKey(index, privateKey);
+		}
+
+		// As soon as Ganache is ready to listen to RPC calls, create an initial checkpoint for each generated account.
+		final Matcher rpcListeningMatcher = RPC_LISTENING.matcher(outputMessage);
+		if (rpcListeningMatcher.matches()) {
+			this.ganacheContainer.getTestingAccounts().values().forEach(TestingAccount::checkpoint);
 		}
 
 		final OutputFrame.OutputType outputType = outputFrame.getType();
