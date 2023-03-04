@@ -64,4 +64,25 @@ public class AccountBalance {
 		return fromWei(this.valueInWei.toString(), unit);
 	}
 
+	/**
+	 * Constructs an account balance with the initial given value in the specified unit.
+	 *
+	 * @param value The decimal value of the balance.
+	 * @param unit 	The unit.
+	 * @return An account balance instance.
+	 */
+	public static AccountBalance of(final BigDecimal value, final Convert.Unit unit) {
+		return new AccountBalance(value, unit);
+	}
+
+	/**
+	 * Constructs an account balance with the initial given value in the specified unit.
+	 *
+	 * @param value The integer value of the balance.
+	 * @param unit 	The unit.
+	 * @return An account balance instance.
+	 */
+	public static AccountBalance of(final BigInteger value, final Convert.Unit unit) {
+		return AccountBalance.of(new BigDecimal(value), unit);
+	}
 }

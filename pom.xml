@@ -6,7 +6,7 @@
 
     <groupId>com.github.maximevw</groupId>
     <artifactId>moka</artifactId>
-    <version>0.0.1</version>
+    <version>0.1.0</version>
 
     <name>Moka</name>
     <description>A framework for integration testing of Web3j-based applications</description>
@@ -49,6 +49,7 @@
         <!-- Dependencies and plugins versions management -->
         <checkstyle.version>10.7.0</checkstyle.version>
         <commons-lang3.version>3.12.0</commons-lang3.version>
+        <java-jwt.version>4.3.0</java-jwt.version>
         <junit-jupiter.version>5.9.2</junit-jupiter.version>
         <lombok.version>1.18.26</lombok.version>
         <maven-checkstyle-plugin.version>3.2.1</maven-checkstyle-plugin.version>
@@ -82,6 +83,12 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>${java-jwt.version}</version>
         </dependency>
 
         <dependency>

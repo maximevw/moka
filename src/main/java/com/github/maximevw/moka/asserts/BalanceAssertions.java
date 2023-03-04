@@ -11,9 +11,10 @@ package com.github.maximevw.moka.asserts;
 import com.github.maximevw.moka.entities.TestingAccount;
 import org.junit.jupiter.api.Assertions;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.math.RoundingMode;
+
+import static org.junit.jupiter.api.AssertionFailureBuilder.assertionFailure;
+import static org.web3j.utils.Convert.Unit.WEI;
 
 /**
  * Assertions for account balances.
@@ -31,7 +32,7 @@ public final class BalanceAssertions {
 	 * @param expectedBalance	The expected balance in WEI.
 	 */
 	public static void assertBalanceEquals(final TestingAccount account, final BigInteger expectedBalance) {
-		Assertions.assertEquals(expectedBalance, account.getBalance().setScale(0, RoundingMode.HALF_UP).toBigInteger());
+		Assertions.assertEquals(expectedBalance, account.getBalanceInWei());
 	}
 
 	/**
@@ -41,8 +42,34 @@ public final class BalanceAssertions {
 	 * @see TestingAccount#checkpoint()
 	 */
 	public static void assertBalanceDecreased(final TestingAccount account) {
-		final BigDecimal currentBalance = account.getBalance();
-		Assertions.assertTrue(currentBalance.compareTo(account.getLastBalance()) < 0);
+		final BigInteger currentBalance = account.getBalanceInWei();
+		final BigInteger lastBalance = account.getLastBalance();
+		if (!(currentBalance.compareTo(lastBalance) < 0)) {
+			assertionFailure().message("The current balance has not decreased since the last checkpoint.")
+				.expected("Less than " + lastBalance + WEI.name())
+				.actual(currentBalance + WEI.name())
+				.buildAndThrow();
+		}
+	}
+
+	/**
+	 * Asserts that the balance of the given account has decreased in a given proportion since the last account
+	 * checkpoint.
+	 *
+	 * @param account The tested account.
+	 * @param matcher The comparison matcher.
+	 * @see TestingAccount#checkpoint()
+	 */
+	public static void assertBalanceDecreased(final TestingAccount account,
+											  final ComparisonMatcher<BigInteger> matcher) {
+		final BigInteger currentBalance = account.getBalanceInWei();
+		final BigInteger lastBalance = account.getLastBalance();
+		if (!matcher.comparesTo(lastBalance.subtract(currentBalance))) {
+			assertionFailure().message("The current balance has not decreased since the last checkpoint.")
+				.expected("Less than " + lastBalance + WEI.name())
+				.actual(currentBalance + WEI.name())
+				.buildAndThrow();
+		}
 	}
 
 	/**
@@ -52,8 +79,34 @@ public final class BalanceAssertions {
 	 * @see TestingAccount#checkpoint()
 	 */
 	public static void assertBalanceIncreased(final TestingAccount account) {
-		final BigDecimal currentBalance = account.getBalance();
-		Assertions.assertTrue(currentBalance.compareTo(account.getLastBalance()) > 0);
+		final BigInteger currentBalance = account.getBalanceInWei();
+		final BigInteger lastBalance = account.getLastBalance();
+		if (!(currentBalance.compareTo(lastBalance) > 0)) {
+			assertionFailure().message("The current balance has not increased since the last checkpoint.")
+				.expected("More than " + lastBalance + WEI.name())
+				.actual(currentBalance + WEI.name())
+				.buildAndThrow();
+		}
+	}
+
+	/**
+	 * Asserts that the balance of the given account has increased in a given proportion since the last account
+	 * checkpoint.
+	 *
+	 * @param account The tested account.
+	 * @param matcher The comparison matcher.
+	 * @see TestingAccount#checkpoint()
+	 */
+	public static void assertBalanceIncreased(final TestingAccount account,
+											  final ComparisonMatcher<BigInteger> matcher) {
+		final BigInteger currentBalance = account.getBalanceInWei();
+		final BigInteger lastBalance = account.getLastBalance();
+		if (!matcher.comparesTo(currentBalance.subtract(account.getLastBalance()))) {
+			assertionFailure().message("The current balance has not increased since the last checkpoint.")
+				.expected("More than " + lastBalance + WEI.name())
+				.actual(currentBalance + WEI.name())
+				.buildAndThrow();
+		}
 	}
 
 	/**
@@ -63,7 +116,14 @@ public final class BalanceAssertions {
 	 * @see TestingAccount#checkpoint()
 	 */
 	public static void assertBalanceStable(final TestingAccount account) {
-		final BigDecimal currentBalance = account.getBalance();
-		Assertions.assertEquals(0, currentBalance.compareTo(account.getLastBalance()));
+		final BigInteger currentBalance = account.getBalanceInWei();
+		final BigInteger lastBalance = account.getLastBalance();
+		if (!(currentBalance.compareTo(lastBalance) == 0)) {
+			assertionFailure().message("The current balance has changed since the last checkpoint.")
+				.expected(lastBalance + WEI.name())
+				.actual(currentBalance + WEI.name())
+				.buildAndThrow();
+		}
 	}
+
 }
