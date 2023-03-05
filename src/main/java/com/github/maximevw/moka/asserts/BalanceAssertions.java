@@ -9,6 +9,7 @@
 package com.github.maximevw.moka.asserts;
 
 import com.github.maximevw.moka.entities.TestingAccount;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 
 import java.math.BigInteger;
@@ -53,20 +54,28 @@ public final class BalanceAssertions {
 	}
 
 	/**
-	 * Asserts that the balance of the given account has decreased in a given proportion since the last account
+	 * Asserts that the balance of the given account has decreased in a given proportion (in WEI) since the last account
 	 * checkpoint.
 	 *
 	 * @param account The tested account.
-	 * @param matcher The comparison matcher.
+	 * @param matcher The comparison matcher using a value in WEI.
 	 * @see TestingAccount#checkpoint()
 	 */
 	public static void assertBalanceDecreased(final TestingAccount account,
-											  final ComparisonMatcher<BigInteger> matcher) {
+											  final VariationMatcher<BigInteger> matcher) {
 		final BigInteger currentBalance = account.getBalanceInWei();
 		final BigInteger lastBalance = account.getLastBalance();
-		if (!matcher.comparesTo(lastBalance.subtract(currentBalance))) {
-			assertionFailure().message("The current balance has not decreased since the last checkpoint.")
-				.expected("Less than " + lastBalance + WEI.name())
+		final BigInteger variation = lastBalance.subtract(currentBalance);
+		if (variation.signum() < 0 || !matcher.comparesTo(variation)) {
+			String expectedComplement = StringUtils.EMPTY;
+			if (matcher.maximalVariation().isPresent()) {
+				expectedComplement = " and more than " + lastBalance.subtract(matcher.maximalVariation().get())
+					+ WEI.name();
+			}
+			assertionFailure().message("The current balance has not decreased of " + matcher.describeMismatch()
+					+ "WEI since the last checkpoint.")
+				.expected("Less than " + lastBalance.subtract(matcher.minimalVariation().orElse(BigInteger.ZERO))
+					+ WEI.name() + expectedComplement)
 				.actual(currentBalance + WEI.name())
 				.buildAndThrow();
 		}
@@ -90,20 +99,27 @@ public final class BalanceAssertions {
 	}
 
 	/**
-	 * Asserts that the balance of the given account has increased in a given proportion since the last account
+	 * Asserts that the balance of the given account has increased in a given proportion (in WEI) since the last account
 	 * checkpoint.
 	 *
 	 * @param account The tested account.
-	 * @param matcher The comparison matcher.
+	 * @param matcher The comparison matcher using a value in WEI.
 	 * @see TestingAccount#checkpoint()
 	 */
 	public static void assertBalanceIncreased(final TestingAccount account,
-											  final ComparisonMatcher<BigInteger> matcher) {
+											  final VariationMatcher<BigInteger> matcher) {
 		final BigInteger currentBalance = account.getBalanceInWei();
 		final BigInteger lastBalance = account.getLastBalance();
-		if (!matcher.comparesTo(currentBalance.subtract(account.getLastBalance()))) {
-			assertionFailure().message("The current balance has not increased since the last checkpoint.")
-				.expected("More than " + lastBalance + WEI.name())
+		final BigInteger variation = currentBalance.subtract(lastBalance);
+		if (variation.signum() < 0 || !matcher.comparesTo(variation)) {
+			String expectedComplement = StringUtils.EMPTY;
+			if (matcher.maximalVariation().isPresent()) {
+				expectedComplement = " and less than " + lastBalance.add(matcher.maximalVariation().get()) + WEI.name();
+			}
+			assertionFailure().message("The current balance has not increased of " + matcher.describeMismatch()
+					+ "WEI since the last checkpoint.")
+				.expected("More than " + lastBalance.add(matcher.minimalVariation().orElse(BigInteger.ZERO))
+					+ WEI.name() + expectedComplement)
 				.actual(currentBalance + WEI.name())
 				.buildAndThrow();
 		}

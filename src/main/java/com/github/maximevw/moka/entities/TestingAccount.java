@@ -85,11 +85,11 @@ public class TestingAccount {
 	 * @return The balance of the account.
 	 * @throws RuntimeException when the account balance cannot be retrieved.
 	 */
-	public AccountBalance getBalance() {
+	public Amount getBalance() {
 		try {
 			final EthGetBalance ethGetBalance = this.ganacheInstance.getWeb3j()
 					.ethGetBalance(this.address, DefaultBlockParameterName.LATEST).send();
-			return AccountBalance.of(ethGetBalance.getBalance(), Convert.Unit.WEI);
+			return Amount.of(ethGetBalance.getBalance(), Convert.Unit.WEI);
 		} catch (final IOException ex) {
 			throw new RuntimeException(ex);
 		}

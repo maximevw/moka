@@ -43,4 +43,5 @@ public class GanacheOption {
 	public String getOptionNameForVersion(final GanacheVersionLevel versionLevel) {
 		return this.optionsByVersionLevel.get(versionLevel);
 	}
+
 }

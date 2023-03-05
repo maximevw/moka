@@ -1,5 +1,6 @@
 # Moka
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/license/mit/)
+![Build Status](https://img.shields.io/github/actions/workflow/status/maximevw/moka/ci-workflow.yml)
 
 A framework to ease integration tests of applications using [Web3j](https://github.com/web3j/web3j).
 
@@ -65,6 +66,10 @@ class Web3Test {
 
 }
 ```
+
+## Contributing
+
+If you want to contribute to Moka project, please read the content of CONTRIBUTING file.
 
 ## Versioning
 
