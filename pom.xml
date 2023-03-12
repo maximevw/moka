@@ -9,7 +9,7 @@
     <version>0.1.0</version>
 
     <name>Moka</name>
-    <description>A framework for integration testing of Web3j-based applications</description>
+    <description>A toolbox for integration testing of Web3j-based applications</description>
     <url>https://github.com/maximevw/moka</url>
     <inceptionYear>2023</inceptionYear>
 

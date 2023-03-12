@@ -19,6 +19,7 @@ import com.github.maximevw.moka.enums.Network;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.HostPortWaitStrategy;
 import org.web3j.protocol.Web3j;
@@ -31,6 +32,8 @@ import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -1381,6 +1384,50 @@ public class GanacheContainer<SELF extends GanacheContainer<SELF>> extends Gener
 	public SELF withForkCacheDeleted() {
 		checkCompatibility(V7.getMajorVersion());
 		this.ganacheOptions.add("--fork.deleteCache");
+		return self();
+	}
+
+	// Database options
+	// ----------------
+	/**
+	 * The specific path to a directory where the chain is saved.
+	 * <p>
+	 *     Using this option will automatically add the option {@code -d} (or {@code --wallet.deterministic} since v7)
+	 *	   in order to keep consistent accounts addresses between each instance.
+	 * </p>
+	 * <p>
+	 *	   <b>CAUTION!</b> This option will bind the provided path to a path in the container. So, all the operations
+	 *	   performed on the chain during the tests will be written in the provided database. Consequently, the initial
+	 *	   data may vary from a tests execution to another.
+	 * </p>
+	 * <p>
+	 *	   Ganache CLI option: {@code --db} (prior to v7) or {@code --database.dbPath} (since v7)<br>
+	 *	   Minimal required Ganache version: 6<br>
+	 *	   Default value: <i>none</i>
+	 * </p>
+	 *
+	 * @param dbPath The database directory path.
+	 * @return a reference to this container instance.
+	 * @throws IllegalArgumentException when the specified path does not exist or is not a directory.
+	 * @see <a href="https://trufflesuite.com/docs/ganache/reference/cli-options/#database">
+	 *	 Ganache CLI logging options</a>
+	 */
+	public SELF withDatabase(final String dbPath) {
+		final Path dbDirPath = Path.of(dbPath);
+		if (StringUtils.isBlank(dbPath)) {
+			throw new IllegalArgumentException("The specified database path cannot be blank.");
+		} else if (Files.notExists(dbDirPath)) {
+			throw new IllegalArgumentException("The specified database path does not exist.");
+		} else if (!Files.isDirectory(dbDirPath)) {
+			throw new IllegalArgumentException("The specified database path is not a directory.");
+		}
+		this.addFileSystemBind(dbPath, "/db_ganache", BindMode.READ_WRITE);
+		final GanacheOption dbPathOptions = new GanacheOption()
+			.addOption(V6, "--db /db_ganache")
+			.addOption(V7, "--database.dbPath /db_ganache");
+		this.ganacheOptions.add(dbPathOptions.getOptionNameForVersion(this.ganacheVersionLevel));
+		// Add the deterministic seed option.
+		this.ganacheOptions.add("-d");
 		return self();
 	}
 

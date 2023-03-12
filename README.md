@@ -2,7 +2,7 @@
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/license/mit/)
 ![Build Status](https://img.shields.io/github/actions/workflow/status/maximevw/moka/ci-workflow.yml)
 
-A framework to ease integration tests of applications using [Web3j](https://github.com/web3j/web3j).
+A toolbox to ease integration tests of applications using [Web3j](https://github.com/web3j/web3j).
 
 Built with [Testcontainers](https://www.testcontainers.org/) and [Ganache](https://trufflesuite.com/ganache/).
 
